@@ -1,0 +1,56 @@
+{
+  "name": "autowash-backend",
+  "version": "1.0.0",
+  "description": "Autowash backend: REST + Socket.IO bridge to the ESP32 over MQTT",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "postinstall": "prisma generate",
+    "dev:fake-esp": "tsx scripts/dev-fake-esp.ts",
+    "verify:manual": "tsx scripts/manual-check.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "helmet": "^8.3.0",
+    "mqtt": "^5.16.1",
+    "pino": "^10.4.0",
+    "socket.io": "^4.8.4",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "@types/supertest": "^7.2.1",
+    "aedes": "^1.2.0",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "pino-pretty": "^13.2.0",
+    "prisma": "^7.10.1",
+    "socket.io-client": "^4.8.4",
+    "supertest": "^7.3.2",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^5.1.1"
+  }
+}

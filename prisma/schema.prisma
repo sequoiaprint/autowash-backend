@@ -1,0 +1,67 @@
+datasource db {
+  provider = "mysql"
+}
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat    = "esm"
+  importFileExtension = "js"
+}
+
+enum WashOutcome {
+  IN_PROGRESS
+  COMPLETED
+  STOPPED
+  INTERRUPTED
+}
+
+enum ConfigChangeType {
+  SEQUENCE
+  TIMING
+  EXTERNAL
+}
+
+enum ConfigChangeResult {
+  APPLIED
+  REJECTED
+  TIMED_OUT
+  DETECTED
+}
+
+model WashRun {
+  id               String      @id @default(uuid()) @db.Char(36)
+  washNumber       Int
+  outcome          WashOutcome @default(IN_PROGRESS)
+  startedAt        DateTime    @db.DateTime(3)
+  endedAt          DateTime?   @db.DateTime(3)
+  totalSeconds     Int
+  elapsedSeconds   Int         @default(0)
+  breakCount       Int         @default(0)
+  pauseCount       Int         @default(0)
+  linkPauseCount   Int         @default(0)
+  sequenceSnapshot Json
+  timingSnapshot   Json
+  recovered        Boolean     @default(false)
+  createdAt        DateTime    @default(now()) @db.DateTime(3)
+  updatedAt        DateTime    @updatedAt @db.DateTime(3)
+
+  @@index([startedAt])
+  @@index([washNumber, startedAt])
+  @@map("wash_runs")
+}
+
+model ConfigChangeLog {
+  id              String             @id @default(uuid()) @db.Char(36)
+  requestId       String?            @unique @db.VarChar(32)
+  changeType      ConfigChangeType
+  washNumber      Int?
+  previousConfig  Json?
+  requestedConfig Json
+  result          ConfigChangeResult
+  errorCode       String?            @db.VarChar(64)
+  createdAt       DateTime           @default(now()) @db.DateTime(3)
+
+  @@index([createdAt])
+  @@map("config_change_logs")
+}
